@@ -1,21 +1,20 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.jetbrains.compose.compiler)
 }
 
 android {
     namespace = "uz.rsteam.kotlin210rctest.android"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "uz.rsteam.kotlin210rctest.android"
         minSdk = 24
-        targetSdk = 34
+        //noinspection EditedTargetSdkVersion
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-    }
-    buildFeatures {
-        compose = true
     }
     packaging {
         resources {
@@ -38,9 +37,16 @@ android {
 
 dependencies {
     implementation(projects.shared)
-    implementation(libs.compose.ui)
-    implementation(libs.compose.ui.tooling.preview)
-    implementation(libs.compose.material3)
+    implementation(compose.ui)
+    implementation(compose.material3)
     implementation(libs.androidx.activity.compose)
     debugImplementation(libs.compose.ui.tooling)
+
+
+    implementation(libs.decompose)
+    implementation(libs.mvikotlin)
+    implementation(libs.mvikotlin.main)
+    implementation(libs.mvikotlin.logging)
+
+    implementation(libs.napier)
 }

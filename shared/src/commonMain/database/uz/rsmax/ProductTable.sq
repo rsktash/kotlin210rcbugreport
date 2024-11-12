@@ -1,0 +1,48 @@
+import kotlin.Boolean;
+import kotlinx.datetime.Instant;
+import uz.rsmax.kotlin210rctest.decompose.app.product.ProductId;
+
+CREATE TABLE ProductTable (
+    id INTEGER AS ProductId NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    price REAL NOT NULL,
+    isDeleted INTEGER AS Boolean NOT NULL DEFAULT 0,
+    createdAt INTEGER AS Instant NOT NULL,
+    modifiedAt INTEGER AS Instant NOT NULL
+);
+
+CREATE VIEW CurrentTimeInMillis
+AS SELECT strftime('%s','now') || substr(strftime('%f','now'), 4) AS tm;
+
+
+findAll:
+SELECT * FROM ProductTable;
+
+findById:
+SELECT * FROM ProductTable WHERE id = :id;
+
+
+insert:
+INSERT OR IGNORE INTO ProductTable(
+    name, description, price, isDeleted, createdAt, modifiedAt
+)
+VALUES(:name, :description, :price, :isDeleted, :createdAt, :modifiedAt)
+RETURNING *;
+
+update:
+UPDATE ProductTable
+SET name = :name, description = :description, price = :price, isDeleted = :isDeleted, modifiedAt = :modifiedAt
+WHERE id = :id
+RETURNING *;
+
+upsert {
+    UPDATE ProductTable
+    SET name = :name, description = :description, price = :price, isDeleted = :isDeleted, modifiedAt = :modifiedAt
+    WHERE id = :id;
+
+    INSERT OR IGNORE INTO ProductTable(
+        id, name, description, price, isDeleted, createdAt, modifiedAt
+    )
+    VALUES(:id, :name, :description, :price, :isDeleted, :createdAt, :modifiedAt);
+}

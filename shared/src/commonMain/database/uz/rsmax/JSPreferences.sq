@@ -1,0 +1,26 @@
+
+CREATE TABLE JSPreferences (
+    key TEXT NOT NULL PRIMARY KEY,
+    textValue TEXT NOT NULL
+);
+
+findAll:
+SELECT * FROM JSPreferences;
+
+get:
+SELECT textValue FROM JSPreferences WHERE key = :key;
+
+set {
+    UPDATE JSPreferences
+    SET textValue = :value
+    WHERE key = :key;
+
+    INSERT OR IGNORE INTO JSPreferences(key, textValue)
+    VALUES(:key, :value);
+}
+
+remove:
+DELETE FROM JSPreferences WHERE key = :key;
+
+clear:
+DELETE FROM JSPreferences;

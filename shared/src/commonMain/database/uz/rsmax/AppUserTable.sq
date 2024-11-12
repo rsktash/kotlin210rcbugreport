@@ -1,0 +1,31 @@
+import uz.rsmax.kotlin210rctest.decompose.UserId;
+
+CREATE TABLE AppUserTable (
+    id INTEGER AS UserId NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL
+);
+
+
+findAll:
+SELECT * FROM AppUserTable;
+
+findById:
+SELECT * FROM AppUserTable WHERE id = :id;
+
+insert:
+INSERT INTO AppUserTable(name, email) VALUES (:name, :email) RETURNING *;
+
+update:
+UPDATE AppUserTable SET name = :name, email = :email WHERE id = :id;
+
+upsert {
+    UPDATE AppUserTable
+    SET name = :name, email = :email
+    WHERE id = :id;
+
+    INSERT OR IGNORE INTO AppUserTable(
+        id, name, email
+    )
+    VALUES(:id, :name, :email);
+}
